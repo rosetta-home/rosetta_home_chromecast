@@ -22,7 +22,7 @@ defmodule RosettaHomeChromecast.Mixfile do
     [
       {:chromecast, "~> 0.1.2"},
       {:mdns, "~> 0.1.5"},
-      {:rosetta_home, github: "rosetta-home/cicada", branch: "dependency"},
+      {:cicada, github: "rosetta-home/cicada", branch: "dependency"},
     ]
   end
 end
