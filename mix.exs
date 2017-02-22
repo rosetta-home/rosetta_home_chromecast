@@ -15,14 +15,14 @@ defmodule RosettaHomeChromecast.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger, :chromecast, :mdns, :network_manager, :device_manager]]
+    [extra_applications: [:logger, :chromecast, :mdns, :cicada]]
   end
 
   defp deps do
     [
       {:chromecast, "~> 0.1.2"},
       {:mdns, "~> 0.1.5"},
-      {:cicada, github: "rosetta-home/cicada", branch: "dependency"},
+      {:cicada, github: "rosetta-home/cicada", branch: "dependency", optional: true},
     ]
   end
 end

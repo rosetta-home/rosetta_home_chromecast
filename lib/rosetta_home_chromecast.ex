@@ -1,8 +1,9 @@
-defmodule DeviceManager.Device.MediaPlayer.Chromecast do
+defmodule Cicada.DeviceManager.Device.MediaPlayer.Chromecast do
   use GenServer
   require Logger
-  alias DeviceManager.Device.MediaPlayer
-  @behaviour DeviceManager.Behaviour.MediaPlayer
+  alias Cicada.DeviceManager.Device.MediaPlayer
+  alias Cicada.DeviceManager
+  @behaviour Cicada.DeviceManager.Behaviour.MediaPlayer
 
   def start_link(id, device) do
     GenServer.start_link(__MODULE__, {id, device}, name: id)
@@ -128,12 +129,13 @@ defmodule DeviceManager.Device.MediaPlayer.Chromecast do
 
 end
 
-defmodule DeviceManager.Discovery.MediaPlayer.Chromecast do
-  use DeviceManager.Discovery
+defmodule Cicada.DeviceManager.Discovery.MediaPlayer.Chromecast do
+  use Cicada.DeviceManager.Discovery
   require Logger
-  alias DeviceManager.Device.MediaPlayer
-  alias NetworkManager.State, as: NM
-  alias NetworkManager.Interface, as: NMInterface
+  alias Cicada.DeviceManager.Device.MediaPlayer
+  alias Cicada.NetworkManager.State, as: NM
+  alias Cicada.NetworkManager.Interface, as: NMInterface
+  alias Cicada.NetworkManager
 
   defmodule EventHandler do
     use GenEvent
@@ -169,7 +171,7 @@ defmodule DeviceManager.Discovery.MediaPlayer.Chromecast do
 
   def handle_info(:query_cast, state) do
     Mdns.Client.query("_googlecast._tcp.local")
-    Logger.info "Querying Chromcasts..."
+    Logger.debug "Querying Chromcasts..."
     Process.send_after(self(), :query_cast, 5000)
     {:noreply, state}
   end
