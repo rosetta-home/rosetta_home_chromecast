@@ -62,7 +62,7 @@ defmodule Cicada.DeviceManager.Device.MediaPlayer.Chromecast do
     %MediaPlayer.State{
       ip: state.ip |> :inet_parse.ntoa |> to_string,
       current_time:  state.media_status |> Map.get("currentTime", 0),
-      content_id: media |> Map.get("content_id", ""),
+      content_id: media |> Map.get("content_id", 0),
       content_type: media |> Map.get("contentType", "Unknown"),
       duration: media |> Map.get("duration", 0),
       autoplay: media |> Map.get("autoplay", false),
