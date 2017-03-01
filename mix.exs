@@ -20,7 +20,7 @@ defmodule RosettaHomeChromecast.Mixfile do
 
   defp deps do
     [
-      {:chromecast, "~> 0.1.2"},
+      {:chromecast, "~> 0.1.3"},
       {:mdns, "~> 0.1.5"},
       {:cicada, github: "rosetta-home/cicada", optional: true},
     ]

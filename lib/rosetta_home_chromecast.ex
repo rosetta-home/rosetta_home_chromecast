@@ -58,11 +58,11 @@ defmodule Cicada.DeviceManager.Device.MediaPlayer.Chromecast do
       i -> i |> Enum.at(0, %{})
     end
     app = Map.get(state.receiver_status, "status", %{}) |>  Map.get("applications", []) |> Enum.at(0, %{})
-    #Logger.info "Media: #{inspect media}"
+    Logger.debug "App: #{inspect app}"
     %MediaPlayer.State{
       ip: state.ip |> :inet_parse.ntoa |> to_string,
       current_time:  state.media_status |> Map.get("currentTime", 0),
-      content_id: media |> Map.get("content_id", 0),
+      content_id: media |> Map.get("content_id", ""),
       content_type: media |> Map.get("contentType", "Unknown"),
       duration: media |> Map.get("duration", 0),
       autoplay: media |> Map.get("autoplay", false),
@@ -71,7 +71,10 @@ defmodule Cicada.DeviceManager.Device.MediaPlayer.Chromecast do
       subtitle: metadata |> Map.get("subtitle", ""),
       volume: state.media_status |> Map.get("volume", %{}) |> Map.get("level", 0),
       status: app |> Map.get("statusText", ""),
-      idle: app |> Map.get("isIdleScreen", ""),
+      idle: case app |> Map.get("isIdleScreen", true) do
+        False -> false
+        _ -> true
+      end,
       app_name: app |> Map.get("displayName", ""),
       id: app |> Map.get("appId")
     }
