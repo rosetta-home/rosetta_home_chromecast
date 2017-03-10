@@ -175,7 +175,7 @@ defmodule Cicada.DeviceManager.Discovery.MediaPlayer.Chromecast do
   def handle_info(:query_cast, state) do
     Mdns.Client.query("_googlecast._tcp.local")
     Logger.debug "Querying Chromecasts..."
-    Process.send_after(self(), :query_cast, 20_000)
+    Process.send_after(self(), :query_cast, 17_000)
     {:noreply, state}
   end
 
