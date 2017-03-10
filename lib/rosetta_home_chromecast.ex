@@ -158,6 +158,10 @@ defmodule Cicada.DeviceManager.Discovery.MediaPlayer.Chromecast do
     Logger.info "Starting Chromecast Listener"
     Mdns.EventManager.add_handler(EventHandler)
     NetworkManager.register
+    case NetworkManager.up do
+      true -> Process.send_after(self(), :query_cast, 0)
+      false -> nil
+    end
     {:ok, []}
   end
 
