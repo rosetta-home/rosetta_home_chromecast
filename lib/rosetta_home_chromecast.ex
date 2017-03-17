@@ -1,5 +1,5 @@
 defmodule Cicada.DeviceManager.Device.MediaPlayer.Chromecast do
-  use GenServer
+  use Cicada.DeviceManager.DeviceHistogram
   require Logger
   alias Cicada.DeviceManager.Device.MediaPlayer
   alias Cicada.DeviceManager
