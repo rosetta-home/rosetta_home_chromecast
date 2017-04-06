@@ -162,7 +162,7 @@ defmodule Cicada.DeviceManager.Discovery.MediaPlayer.Chromecast do
       true -> Process.send_after(self(), :query_cast, 0)
       false -> nil
     end
-    {:ok, []}
+    MediaPlayer.Chromecast
   end
 
   def handle_info(%NM{interface: %NMInterface{settings: %{ipv4_address: _address}, status: %{operstate: :up}}}, state) do
@@ -184,7 +184,7 @@ defmodule Cicada.DeviceManager.Discovery.MediaPlayer.Chromecast do
   end
 
   def handle_info(device, state) do
-    {:noreply, handle_device(device, MediaPlayer.Chromecast, state)}
+    {:noreply, handle_device(device, state)}
   end
 
 end
