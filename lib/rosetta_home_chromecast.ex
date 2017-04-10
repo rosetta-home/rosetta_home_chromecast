@@ -97,8 +97,7 @@ defmodule Cicada.DeviceManager.Device.MediaPlayer.Chromecast do
     Process.send_after(self(), :update_state, 1000)
     device = %DeviceManager.Device{device | state:
       Chromecast.state(device.device_pid) |> map_state
-    }
-    device |> DeviceManager.Client.dispatch
+    } |> DeviceManager.dispatch
     {:noreply, device}
   end
 
