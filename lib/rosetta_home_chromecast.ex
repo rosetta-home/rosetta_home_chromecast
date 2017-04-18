@@ -132,12 +132,15 @@ defmodule Cicada.DeviceManager.Device.MediaPlayer.Chromecast do
 end
 
 defmodule Cicada.DeviceManager.Discovery.MediaPlayer.Chromecast do
-  use Cicada.DeviceManager.Discovery
   require Logger
   alias Cicada.DeviceManager.Device.MediaPlayer
   alias Cicada.NetworkManager.State, as: NM
-  alias Cicada.NetworkManager.Interface, as: NMInterface
   alias Cicada.NetworkManager
+  use Cicada.DeviceManager.Discovery, module: MediaPlayer.Chromecast
+
+  defmodule State do
+    defstruct started: false
+  end
 
   defmodule EventHandler do
     use GenEvent
@@ -157,18 +160,12 @@ defmodule Cicada.DeviceManager.Discovery.MediaPlayer.Chromecast do
     Logger.info "Starting Chromecast Listener"
     Mdns.EventManager.add_handler(EventHandler)
     NetworkManager.register
-    case NetworkManager.up do
-      true -> Process.send_after(self(), :query_cast, 0)
-      false -> nil
-    end
-    MediaPlayer.Chromecast
+    %State{}
   end
 
-  def handle_info(%NM{interface: %NMInterface{settings: %{ipv4_address: _address}, status: %{operstate: :up}}}, state) do
-    #wait for mDNS to start, no way to guarantee who gets this event first.
-    :timer.sleep(1000)
-    Process.send_after(self(), :query_cast, 0)
-    {:noreply, state}
+  def handle_info(%NM{bound: true}, %State{started: false} = state) do
+    Process.send_after(self(), :query_cast, 1000)
+    {:noreply, %State{ state | started: true }}
   end
 
   def handle_info(%NM{}, state) do
