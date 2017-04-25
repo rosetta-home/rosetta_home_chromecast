@@ -154,13 +154,24 @@ defmodule Cicada.DeviceManager.Discovery.MediaPlayer.Chromecast do
     def handle_event(_device, parent) do
       {:ok, parent}
     end
+
+    def terminate(reason, parent) do
+      Logger.info "Chromecast EventHandler Terminating: #{inspect reason}"
+      :ok
+    end
+
   end
 
   def register_callbacks do
     Logger.info "Starting Chromecast Listener"
-    Mdns.EventManager.add_handler(EventHandler)
+    Mdns.Events |> GenEvent.add_mon_handler(EventHandler, self())
     NetworkManager.register
-    %State{}
+    case NetworkManager.up do
+      true ->
+        Process.send_after(self(), :query_cast, 1000)
+        %State{started: true}
+      false -> %State{}
+    end
   end
 
   def handle_info(%NM{bound: true}, %State{started: false} = state) do
